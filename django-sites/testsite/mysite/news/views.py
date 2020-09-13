@@ -2,8 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import News, Category
 from .forms import NewsForm
-from django.views.generic import ListView
-
+from django.views.generic import ListView, DetailView
 
 
 class HomeNews(ListView):
@@ -18,7 +17,6 @@ class HomeNews(ListView):
 
     def get_queryset(self):
         return News.objects.filter(is_published=True)
-
 
 
 class NewsByCategory(ListView):
@@ -37,6 +35,13 @@ class NewsByCategory(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = Category.objects.get(pk=self.kwargs['category_id'])
         return context
+
+
+class ViewNews(DetailView):
+    model = News
+    context_object_name = 'news_item'
+    # pk_url_kwarg = 'news_id'
+    # template_name = 'news/news_detail.html'
 
 
 # Create your views here.
